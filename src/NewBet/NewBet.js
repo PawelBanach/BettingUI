@@ -1,32 +1,36 @@
 import React, {Component} from 'react';
-import axios from 'axios';
+import {withRouter} from 'react-router-dom';
 import auth0Client from '../Auth';
+import axios from 'axios';
 
-class LoginPage extends Component {
+class NewBet extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
       disabled: false,
-      username: '',
-      password: '',
+      title: '',
+      description: '',
     };
   }
 
-  async componentDidMount() {
-    // const { match: { params } } = this.props;
-    // const match = (await axios.get(`http://localhost:8081/${params.matchId}`)).data;
-    // this.setState({
-    //   match,
-    // });
+  updateDescription(value) {
+    this.setState({
+      description: value,
+    });
+  }
+
+  updateTitle(value) {
+    this.setState({
+      title: value,
+    });
   }
 
   async submit() {
     this.setState({
       disabled: true,
     });
-    debugger;
-    // todo: add authorize request
-    // auth0Client.signIn
+
     // await axios.post('http://localhost:8081', {
     //   title: this.state.title,
     //   description: this.state.description,
@@ -37,46 +41,32 @@ class LoginPage extends Component {
     this.props.history.push('/');
   }
 
-  updateUsername(value) {
-    // Add validation
-    this.setState({
-      username: value,
-    });
-  }
-
-  updatePassword(value) {
-    // Add validation
-    this.setState({
-      password: value,
-    });
-  }
-
   render() {
     return (
       <div className="container">
         <div className="row">
           <div className="col-12">
             <div className="card border-primary">
-              <div className="card-header">Sign In</div>
+              <div className="card-header">New Bet</div>
               <div className="card-body text-left">
                 <div className="form-group">
-                  <label htmlFor="exampleInputEmail1">Username:</label>
+                  <label htmlFor="exampleInputEmail1">Title:</label>
                   <input
                     disabled={this.state.disabled}
                     type="text"
-                    onBlur={(e) => {this.updateUsername(e.target.value)}}
+                    onBlur={(e) => {this.updateTitle(e.target.value)}}
                     className="form-control"
-                    placeholder="Username"
+                    placeholder="Give your bet a title."
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="exampleInputEmail1">Password:</label>
+                  <label htmlFor="exampleInputEmail1">Description:</label>
                   <input
                     disabled={this.state.disabled}
-                    type="password"
-                    onBlur={(e) => {this.updatePassword(e.target.value)}}
+                    type="text"
+                    onBlur={(e) => {this.updateDescription(e.target.value)}}
                     className="form-control"
-                    placeholder="Password"
+                    placeholder="Give more context to your bet."
                   />
                 </div>
                 <button
@@ -94,4 +84,4 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+export default withRouter(NewBet);

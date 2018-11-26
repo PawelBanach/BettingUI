@@ -8,6 +8,11 @@ function NavBar(props) {
     props.history.replace('/');
   };
 
+  const signIn = () => {
+    debugger;
+    props.history.replace('/sign-in');
+  };
+
   const register = () => {
 
   };
@@ -17,11 +22,11 @@ function NavBar(props) {
       <Link className="navbar-brand" to="/">
         Betting UI
       </Link>
-      <div class="btn-group" role="group" aria-label="Authenticate user">
+      <div className="btn-group" role="group" aria-label="Authenticate user">
         <button className="btn btn-primary" onClick={() => {register()}}>Sign up</button>
         {
           !auth0Client.isAuthenticated() &&
-          <button className="btn btn-primary" onClick={auth0Client.signIn}>Sign In</button>
+          <button className="btn btn-primary" onClick={() => signIn()}>Sign In</button>
         }
         {
           auth0Client.isAuthenticated() &&
