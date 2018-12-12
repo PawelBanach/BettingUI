@@ -1,81 +1,106 @@
 import auth0 from 'auth0-js';
 
-class Auth {
-  constructor() {
-    this.auth0 = new auth0.WebAuth({
-      domain: 'rozrywki2018',
-      audience: 'https://rozrywki2018/userinfo',
-      clientID: 'SnusKbV9Muma176hmEbWOMx2lOnsM3sl',
-      redirectUri: 'http://localhost:3000/callback',
-      responseType: 'id_token',
-      scope: 'openid profile'
+export default class Auth {
+  auth0 = new auth0.WebAuth({
+    domain: 'rozrywki2018.auth0.com',
+    clientID: 'SnusKbV9Muma176hmEbWOMx2lOnsM3sl',
+    redirectUri: 'http://localhost:3000/callback',
+    responseType: 'token id_token',
+    scope: 'openid profile'
+  });
+
+  //     "username": "m2984732@nwytg.net",
+  //     "password": "Test1234",
+
+  constructor(props) {
+    this.state = {
+      ...props,
+      accessToken: '',
+      idToken: '',
+      profile: {},
+      expiresAt: 0,
+    };
+    this.renewSession();
+  }
+
+  handleAuthentication = () => {
+    this.auth0.parseHash((err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken && authResult.profile) {
+        this.setSession(authResult);
+      } else if (err) {
+        this.state.history.push('/dashboard');
+        console.log(err);
+        alert(`Error: ${err.error}. Check the console for further details.`);
+      }
     });
+  };
 
-    this.getProfile = this.getProfile.bind(this);
-    this.handleAuthentication = this.handleAuthentication.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.signIn = this.signIn.bind(this);
-    this.signOut = this.signOut.bind(this);
-  }
+  getAccessToken = () => {
+    return this.state.accessToken;
+  };
 
-  getProfile() {
-    return this.profile;
-  }
+  getIdToken = () => {
+    return this.state.idToken;
+  };
 
-  getIdToken() {
-    return this.idToken;
-  }
+  getProfile = () => {
+    return this.state.profile;
+  };
 
-  isAuthenticated() {
-    return new Date().getTime() < this.expiresAt;
-  }
 
-  signIn() {
+  setSession = (authResult) => {
+    // Set isLoggedIn flag in localStorage
+    localStorage.setItem('isLoggedIn', 'true');
+
+    // Set the time that the access token will expire at
+    let expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
+    this.state.accessToken = authResult.accessToken;
+    this.state.idToken = authResult.idToken;
+    this.state.profile = authResult.idTokenPayload;
+    this.state.expiresAt = expiresAt;
+    // navigate to the home route
+    this.state.history.push('/dashboard');
+  };
+
+  renewSession = (callback) => {
+    this.auth0.checkSession({}, (err, authResult) => {
+      if (authResult && authResult.accessToken && authResult.idToken) {
+        this.setSession(authResult);
+      } else if (err) {
+        this.logout();
+        // console.log(err);
+        // alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+      }
+    });
+  };
+
+  login = () => {
     this.auth0.authorize();
-  }
+  };
 
-  handleAuthentication() {
-    return new Promise((resolve, reject) => {
-      this.auth0.parseHash((err, authResult) => {
-        if (err) return reject(err);
-        if (!authResult || !authResult.idToken) {
-          return reject(err);
-        }
-        this.setSession(authResult);
-        // this.idToken = authResult.idToken;
-        // this.profile = authResult.idTokenPayload;
-        // // set the time that the id token will expire at
-        // this.expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
-        resolve();
-      });
-    })
-  }
+  logout = () => {
+    // Remove tokens and expiry time
+    this.state.accessToken = null;
+    this.state.idToken = null;
+    this.state.profile = {};
+    this.state.expiresAt = 0;
 
-  setSession(authResult) {
-    this.idToken = authResult.idToken;
-    this.profile = authResult.idTokenPayload;
-    // set the time that the id token will expire at
-    this.expiresAt = authResult.idTokenPayload.exp * 1000;
-  }
+    // Remove isLoggedIn flag from localStorage
+    localStorage.removeItem('isLoggedIn');
 
-  signOut() {
-    this.auth0.logout({
-      returnTo: 'http://localhost:3000',
-      clientID: 'SnusKbV9Muma176hmEbWOMx2lOnsM3sl',
-    });
-  }
+    // navigate to the home route
+    this.state.history.push('/dashboard');
+  };
 
-  silentAuth() {
-    return new Promise((resolve, reject) => {
-      this.auth0.checkSession({}, (err, authResult) => {
-        if (err) return reject(err);
-        this.setSession(authResult);
-        resolve();
-      });
-    });
-  }
+  register = () => {
+    // todo: change to register on Auth0
+    this.state.history.push('/sign-up');
+  };
+
+  isAuthenticated = () => {
+    // Check whether the current time is past the
+    // access token's expiry time
+    let expiresAt = this.state.expiresAt;
+    return new Date().getTime() < expiresAt;
+  };
 }
-
-const auth0Client = new Auth();
-
-export default auth0Client;

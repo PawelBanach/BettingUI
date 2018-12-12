@@ -1,43 +1,56 @@
-import React from 'react';
-import {Link, withRouter} from 'react-router-dom';
-import auth0Client from '../Auth';
+import React, { Component } from 'react';
+import { Link, withRouter } from 'react-router-dom';
 
-function NavBar(props) {
-  const signOut = () => {
-    auth0Client.signOut();
-    props.history.replace('/');
+class NavBar extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  register = () => {
+    this.props.auth.register();
   };
 
-  const signIn = () => {
-    debugger;
-    props.history.replace('/sign-in');
+  login = () => {
+    this.props.auth.login();
   };
 
-  const register = () => {
-
+  logout = () => {
+    this.props.auth.logout();
   };
 
-  return (
-    <nav className="navbar navbar-dark bg-primary fixed-top">
-      <Link className="navbar-brand" to="/">
-        Betting UI
-      </Link>
-      <div className="btn-group" role="group" aria-label="Authenticate user">
-        <button className="btn btn-primary" onClick={() => {register()}}>Sign up</button>
-        {
-          !auth0Client.isAuthenticated() &&
-          <button className="btn btn-primary" onClick={() => signIn()}>Sign In</button>
-        }
-        {
-          auth0Client.isAuthenticated() &&
-          <div>
-            <label className="mr-2 text-white">{auth0Client.getProfile().name}</label>
-            <button className="btn btn-primary" onClick={() => {signOut()}}>Sign Out</button>
-          </div>
-        }
+  renderUnauthenticatedNavBar() {
+    return (
+      <div>
+        <button className="btn btn-dark" onClick={() => {this.register()}}>Register</button>
+        <button className="btn btn-dark" onClick={() => {this.login()}}>Sign In</button>
       </div>
-    </nav>
-  );
+    )
+  }
+
+  renderAuthenticatedNavBar() {
+    const { nickname, picture } = this.props.auth.getProfile();
+    return (
+      <div>
+        <img src={picture} alt="Avatar" className="avatar"/>
+        <label className="mr-2 text-white">{nickname}</label>
+        <button className="btn btn-dark" onClick={() => {this.logout()}}>Sign Out</button>
+      </div>
+    )
+  };
+
+  render() {
+    const { isAuthenticated } = this.props.auth;
+    return (
+      <nav className="navbar navbar-dark fixed-top dark-theme">
+        <Link className="navbar-brand betting-ui" to="/">
+          Betting UI
+        </Link>
+        <div className="btn-group" role="group" aria-label="Authenticate user">
+          { isAuthenticated() ? this.renderAuthenticatedNavBar() : this.renderUnauthenticatedNavBar() }
+        </div>
+      </nav>
+    );
+  }
 }
 
 export default withRouter(NavBar);

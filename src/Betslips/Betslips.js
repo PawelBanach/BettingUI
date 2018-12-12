@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class Events extends Component {
+class Betslips extends Component {
   constructor(props) {
     super(props);
   }
@@ -8,9 +8,9 @@ class Events extends Component {
   render() {
 
     return (
-      <div>Events</div>
+      <div>Betslips</div>
     )
   }
 }
 
-export default Events;
+export default Betslips;
