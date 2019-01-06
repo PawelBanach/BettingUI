@@ -1,3 +1,6 @@
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'mdbreact/dist/css/mdb.css';
 import React, { Component } from 'react';
 import NavBar from './NavBar/NavBar';
 import Matches from './Matches/Matches';
@@ -14,7 +17,7 @@ import SideBar from './SideBar/SideBar';
 import Events from './Events/Events';
 import Wallet from './Wallet/Wallet';
 import Statistics from './Statistics/Statistics';
-import Betslips from './Betslips/Betslips';
+import Betslips from './BetSlips/BetSlips';
 
 class App extends Component {
 
@@ -30,7 +33,9 @@ class App extends Component {
   };
 
   componentDidMount() {
-    if (localStorage.getItem('isLoggedIn') === 'true') { this.auth.renewSession(); }
+    if (localStorage.getItem('isLoggedIn') === 'true' && !this.auth.isAuthenticated()) {
+      this.auth.renewSession(this.props.location.path);
+    }
   }
 
   render() {
@@ -53,7 +58,7 @@ class App extends Component {
           return <Callback {...props} />
         }}/>
         <SecuredRoute path='/new-bet' component={ NewBet } auth={this.auth}/>
-        <SecuredRoute path='/events' component={ Dashboard } auth={this.auth}/>
+        <SecuredRoute path='/events' component={ Events } auth={this.auth}/>
         <SecuredRoute path='/wallet' component={ Wallet } auth={this.auth}/>
         <SecuredRoute path='/betslips' component={ Betslips } auth={this.auth}/>
         <SecuredRoute path='/statistics' component={ Statistics } auth={this.auth}/>

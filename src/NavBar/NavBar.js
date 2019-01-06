@@ -43,7 +43,7 @@ class NavBar extends Component {
     return (
       <nav className="navbar navbar-dark fixed-top dark-theme">
         <Link className="navbar-brand betting-ui" to="/">
-          Betting UI
+          JP Bets
         </Link>
         <div className="btn-group" role="group" aria-label="Authenticate user">
           { isAuthenticated() ? this.renderAuthenticatedNavBar() : this.renderUnauthenticatedNavBar() }

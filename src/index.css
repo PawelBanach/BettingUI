@@ -20,8 +20,15 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin-top: 100px;
-  margin-left: 70px;
+
+}
+
+.container-fluid {
+  margin-top: 80px;
+}
+
+.container-fluid-margin-left {
+  margin-left: 70px !important;
 }
 
 code {
@@ -174,4 +181,29 @@ code {
 
 .margin-top-40 {
   margin-top: 40px;
+}
+
+.odd-group {
+  width: 100%;
+}
+
+.odd-result {
+  float: left;
+  width: 100%;
+}
+
+.odd-value {
+  float: left;
+  width: 100%;
+  color: #373a3c;
+}
+
+.result-table {
+  width: 100%;
+  text-align: center;
+}
+
+.bets-header {
+  padding: 40px;
+  text-align: center;
 }

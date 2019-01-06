@@ -25,7 +25,7 @@ export default class Auth {
 
   handleAuthentication = () => {
     this.auth0.parseHash((err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken && authResult.profile) {
+      if (authResult && authResult.accessToken && authResult.idToken && authResult.idTokenPayload) {
         this.setSession(authResult);
       } else if (err) {
         this.state.history.push('/dashboard');
@@ -48,7 +48,7 @@ export default class Auth {
   };
 
 
-  setSession = (authResult) => {
+  setSession = (authResult, path = '/events') => {
     // Set isLoggedIn flag in localStorage
     localStorage.setItem('isLoggedIn', 'true');
 
@@ -59,13 +59,13 @@ export default class Auth {
     this.state.profile = authResult.idTokenPayload;
     this.state.expiresAt = expiresAt;
     // navigate to the home route
-    this.state.history.push('/dashboard');
+    this.state.history.push(path);
   };
 
-  renewSession = (callback) => {
+  renewSession = (path) => {
     this.auth0.checkSession({}, (err, authResult) => {
-      if (authResult && authResult.accessToken && authResult.idToken) {
-        this.setSession(authResult);
+      if (authResult && authResult.accessToken && authResult.idToken && authResult.idTokenPayload) {
+        this.setSession(authResult, path);
       } else if (err) {
         this.logout();
         // console.log(err);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class Betslips extends Component {
+class BetSlips extends Component {
   constructor(props) {
     super(props);
   }
@@ -13,4 +13,4 @@ class Betslips extends Component {
   }
 }
 
-export default Betslips;
+export default BetSlips;
