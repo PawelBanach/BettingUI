@@ -68,31 +68,3 @@ class App extends Component {
 }
 
 export default withRouter(App);
-
-// TODO:
-// rejestracja użytkownika
-// zalogowanie się przez usera (OAuth 0)
-// stworzenie betu
-// looknięcie na historię betów
-// sprawdzenie betu
-// doładowanie walletu
-// widoki płatności
-
-// Bet:
-// ID
-// UID
-// CID
-// CashDesk
-
-// Bet
-// Match ID
-// Wariant
-// Kurs
-
-// Match
-// Home
-// Away
-// [(wariant, kurs)]
-// Time
-// Wynik
-// https://auth0.com/blog/react-tutorial-building-and-securing-your-first-app/

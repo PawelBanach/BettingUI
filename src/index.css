@@ -207,3 +207,7 @@ code {
   padding: 40px;
   text-align: center;
 }
+
+.clickable {
+  cursor: pointer;
+}

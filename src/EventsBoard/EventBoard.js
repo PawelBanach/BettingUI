@@ -90,6 +90,17 @@ class EventBoard extends Component {
     )
   };
 
+  deleteBet = (bet) => {
+    this.setState((prevState) => {
+      const bets = prevState.bets.filter(b => b !== bet);
+      const totalOdd = this.twoDecimals(bets.map((bet) => bet.odd).reduce((a, b) => a * b, 1));
+      const betBase = prevState.betBase || 1;
+      const cashReward = this.twoDecimals( betBase * totalOdd * 0.88);
+      return { bets, totalOdd, cashReward, betBase };
+      }
+    )
+  };
+
   handleBaseChange = (event) => {
     let betBase = event.target.value;
     if(betBase !== '') {
@@ -125,6 +136,7 @@ class EventBoard extends Component {
             bets={ bets }
             betBase={ betBase }
             cashReward={ cashReward }
+            deleteBet={ this.deleteBet }
             totalOdd={ totalOdd }
             handleBaseChange={ this.handleBaseChange }
           />
