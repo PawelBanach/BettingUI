@@ -10,18 +10,17 @@ class BetCalculator extends Component {
 
   componentDidUpdate(oldProps) {
     const newProps = this.props;
-    if(newProps.bets.length !== oldProps.bets.length) {
-      this.setState(newProps)
+    if(newProps.bets.length !== oldProps.bets.length || newProps.betBase !== oldProps.betBase) {
+      this.setState(newProps);
     }
   }
 
-  // TODO: dorobic usuwanie betow
   renderBetsList(bets) {
     let betsRows = [];
     bets.forEach(bet => betsRows.push(
       <li className="list-group-item" key={bet.title}>
         <small>{bet.title}</small><br/>
-        <small>Type: <b>{bet.type}</b></small>
+        <small>Type: <b>{bet.variant}</b></small>
         <i
           className="fas fa-times float-right clickable"
           onClick={() => this.props.deleteBet(bet)}>
@@ -43,22 +42,25 @@ class BetCalculator extends Component {
   };
 
   createBetSlip = () => {
-    debugger;
-    let betSlip = {
-      matches: [
-        {
-          matchId: '123',
-          variant: '123',
-        }
-      ],
-      money: 123,
-      userId: '1',
+    const { bets, betBase, userId } = this.state;
+    const betSlip = {
+      matches: bets,
+      money: betBase,
+      userId: userId,
+      cashierId: userId,
+      deskId: userId,
+      errors: [],
     };
 
     BetSlipsService.createBetSlip(
       betSlip,
-      response => { debugger; },
-      error => { debugger; }
+      response => {
+        let id = response.data.id;
+        this.props.history.push(`/bet-slips/${id}`);
+      },
+      errors => this.setState(prevState => ({
+        errors: [...prevState.errors, errors]
+      }))
     )
   };
 
@@ -106,7 +108,7 @@ class BetCalculator extends Component {
 
           <button
             disabled={bets.length === 0}
-            className="btn btn-primary float-right"
+            className="btn blue-gradient float-right"
             onClick={() => this.onBet(demo)}>
             Bet
           </button>

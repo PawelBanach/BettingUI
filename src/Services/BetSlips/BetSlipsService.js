@@ -17,7 +17,16 @@ class BetSlipsService {
     axios.post(`${HttpClient.url()}/bet-slips`, body, { headers: {'Content-Type': 'application/json'} })
       .then(response => successCallback(response))
       .catch(errors => failureCallback(errors));
+  }
 
+  static getBetSlips(options = {}, successCallback, failureCallback) {
+    let queryParams = Object.keys(options).reduce((acc, key) => {
+      return (acc === '') ? `?${key}=${options[key]}` : `${acc}&${key}=${options[key]}`;
+    }, '');
+
+    axios.get(`${HttpClient.url()}/bet-slips${queryParams}`, { headers: {'Content-Type': 'application/json'} })
+      .then(response => successCallback(response))
+      .catch(errors => failureCallback(errors));
   }
 }
 

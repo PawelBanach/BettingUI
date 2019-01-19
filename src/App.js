@@ -17,7 +17,8 @@ import SideBar from './SideBar/SideBar';
 import Events from './Events/Events';
 import Wallet from './Wallet/Wallet';
 import Statistics from './Statistics/Statistics';
-import Betslips from './BetSlips/BetSlips';
+import BetSlips from './BetSlips/BetSlips';
+import BetSlip from './BetSlip/BetSlip';
 
 class App extends Component {
 
@@ -60,7 +61,8 @@ class App extends Component {
         <SecuredRoute path='/new-bet' component={ NewBet } auth={this.auth}/>
         <SecuredRoute path='/events' component={ Events } auth={this.auth}/>
         <SecuredRoute path='/wallet' component={ Wallet } auth={this.auth}/>
-        <SecuredRoute path='/betslips' component={ Betslips } auth={this.auth}/>
+        <SecuredRoute path='/bet-slips' component={ BetSlips } auth={this.auth}/>
+        <SecuredRoute path='/bet-slips/:betId' component={ BetSlip } auth={this.auth}/>
         <SecuredRoute path='/statistics' component={ Statistics } auth={this.auth}/>
       </div>
     );

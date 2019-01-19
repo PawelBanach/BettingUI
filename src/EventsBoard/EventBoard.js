@@ -14,6 +14,10 @@ class EventBoard extends Component {
 
   constructor(props) {
     super(props);
+    let name = '';
+      if(props.profile && props.profile.profile && props.profile.profile.name) {
+      name = props.profile.profile.name
+    }
     this.state = {
       betBase: 1,
       cashReward: 1,
@@ -23,6 +27,7 @@ class EventBoard extends Component {
       matchesGroupedByLeague: {},
       errors: [],
       demo: props.demo,
+      userId: name, // temporary i pass `name`
     };
   }
 
@@ -40,7 +45,7 @@ class EventBoard extends Component {
         this.setState({ matches: formattedMatches, matchesGroupedByLeague: matchesGroupedByLeague })
       }, errors => {
         this.setState(prevState => ({
-          errors: prevState.errors + errors
+          errors: [...prevState.errors, errors]
         }))
       })
   }
@@ -78,9 +83,10 @@ class EventBoard extends Component {
 
   twoDecimals = num => Math.round(num * 100) / 100;
 
-  addBet = (event, odd, type) => {
-    const bet = { title: `${event.home} - ${event.away}`, type: type, odd: odd, };
+  addBet = (event, odd, variant) => {
+    const bet = { title: `${event.home} - ${event.away}`, variant: variant, odd: odd, matchId: event.id };
     this.setState((prevState) => {
+        if (prevState.bets.find(b => b.matchId === bet.matchId)) return {};
         const bets = [bet, ...prevState.bets];
         const totalOdd = this.twoDecimals(bets.map((bet) => bet.odd).reduce((a, b) => a * b, 1));
         const betBase = prevState.betBase || 1;
@@ -116,10 +122,10 @@ class EventBoard extends Component {
   };
 
   render() {
-    const { matchesGroupedByLeague, demo, bets, betBase, cashReward, totalOdd } = this.state;
+    const { matchesGroupedByLeague, demo, bets, betBase, cashReward, totalOdd, userId } = this.state;
 
     return (
-      <Container>
+      <Container className="container-margin">
         <h3 className="bets-header">Bet the latest matches from 5 TOP LEAGUES and Ekstraklasa</h3>
         <MDBCol sm="9" className="float-left">
           { Object.keys(matchesGroupedByLeague).length !== 0 &&
@@ -139,6 +145,7 @@ class EventBoard extends Component {
             deleteBet={ this.deleteBet }
             totalOdd={ totalOdd }
             handleBaseChange={ this.handleBaseChange }
+            userId={ userId }
           />
         </MDBCol>
       </Container>

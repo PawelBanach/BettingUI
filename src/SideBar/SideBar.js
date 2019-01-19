@@ -32,7 +32,7 @@ class SideBar extends Component {
               Wallet
             </NavText>
           </NavItem>
-          <NavItem eventKey="betslips">
+          <NavItem eventKey="bet-slips">
             <NavIcon>
               <img src={require('../assets/betslip.png')} width="35px" height="35px"/>
             </NavIcon>

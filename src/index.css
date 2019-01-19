@@ -211,3 +211,79 @@ code {
 .clickable {
   cursor: pointer;
 }
+
+.InputFromTo .DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
+  background-color: #f0f8ff !important;
+  color: #4a90e2;
+}
+.InputFromTo .DayPicker-Day {
+  border-radius: 0 !important;
+}
+.InputFromTo .DayPicker-Day--start {
+  border-top-left-radius: 50% !important;
+  border-bottom-left-radius: 50% !important;
+}
+.InputFromTo .DayPicker-Day--end {
+  border-top-right-radius: 50% !important;
+  border-bottom-right-radius: 50% !important;
+}
+
+.status-select {
+  width: 200px;
+  margin: 0 40px;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
+.badge-pill {
+  padding: 0.6em 1em !important;
+}
+
+.container-margin {
+  margin-right: 180px !important;
+}
+
+.match-badge {
+  margin-right: 10px;
+}
+
+.bet-slips-form {
+  justify-content: center;
+}
+
+.bet-slip-row {
+  cursor: pointer;
+}
+
+.bet-slip-row:hover {
+  background: linear-gradient(40deg, #fff 0%, #ebebeb 50%, #fff 100%);
+}
+
+.active-row {
+  background: linear-gradient(40deg, #fff 0%, #ebebeb 50%, #fff 100%);
+}
+
+.bet-row {
+  width: 100%;
+  margin: 10px;
+  display: block;
+  min-height: 25px;
+}
+
+.text-align-right {
+  text-align: right;
+}
+
+.text-align-left {
+  text-align: left;
+}
+
+.event-title {
+  margin: 0 20px;
+}
+
+.event-badge{
+  margin: 0 10px;
+}

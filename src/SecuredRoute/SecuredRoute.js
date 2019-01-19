@@ -4,12 +4,13 @@ import { Route } from 'react-router-dom';
 function SecuredRoute(props) {
   const {component: Component, path, auth} = props;
   return (
-    <Route path={path} render={() => {
+    <Route exact path={path} render={() => {
       if (!auth.isAuthenticated()) {
         auth.renewSession();
         return <div>Not authorized</div>;
       }
-      return <Component />
+      const profile = auth.getProfile();
+      return <Component profile={ profile }/>
     }} />
   );
 }
