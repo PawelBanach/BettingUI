@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { MDBContainer, MDBRow, MDBCol, Container } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, Container, Button, MDBBadge } from 'mdbreact';
 import BetSlipsService from '../Services/BetSlips/BetSlipsService';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import moment from 'moment';
@@ -126,6 +126,7 @@ class BetSlips extends Component {
   }
 
   componentDidMount() {
+    // TODO:
     // https://59ff134a.ngrok.io/bet-slips?limit=10&offset=0&user=1
     let options = {
       limit: 10,
@@ -190,30 +191,30 @@ class BetSlips extends Component {
             <MDBRow>
               <MDBCol sm="3" className="float-left">
                 <div>
-                  <span className="badge badge-pill badge-light">
+                  <MDBBadge pill color="light">
                     <i className="far fa-calendar-check"/> 8/1/2019
-                  </span>
+                  </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="3" className="float-left">
                 <div>
-                <span className="badge badge-pill badge-primary">
+                <MDBBadge pill color="primary">
                   <i className="fas fa-tasks"/> IN PROGRESS
-                </span>
+                </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="3" className="float-left">
                 <div>
-                <span className="badge badge-pill badge-default">
-                  <i className="fas fa-dollar-sign"/> 10.00 zł
-                </span>
+                <MDBBadge pill color="default">
+                  <i className="fas fa-dollar-sign"/> 10.00 $
+                </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="3" className="float-left">
                 <div>
-                  <span className="badge badge-pill badge-success match-badge">1</span>
-                  <span className="badge badge-pill badge-danger match-badge">1</span>
-                  <span className="badge badge-pill badge-primary match-badge">2</span>
+                  <MDBBadge pill className="match-badge" color="success">1</MDBBadge>
+                  <MDBBadge pill className="match-badge" color="danger">1</MDBBadge>
+                  <MDBBadge pill className="match-badge" color="primary">2</MDBBadge>
                 </div>
               </MDBCol>
             </MDBRow>
@@ -222,19 +223,19 @@ class BetSlips extends Component {
             <MDBRow className="active-row">
               <MDBCol sm="4" className="float-left text-align-right">
                 <div className="bet-row">
-                  <span className="badge badge-pill badge-light">
+                  <MDBBadge pill color="light">
                     <i className="far fa-calendar-check"/> 8/1/2019
-                  </span>
+                  </MDBBadge>
                 </div>
                 <div className="bet-row">
-                  <span className="badge badge-pill badge-primary">
+                  <MDBBadge pill color="primary">
                     <i className="fas fa-tasks"/> IN PROGRESS
-                  </span>
+                  </MDBBadge>
                 </div>
                 <div className="bet-row">
-                  <span className="badge badge-pill badge-default">
-                    <i className="fas fa-dollar-sign"/> 10.00 zł
-                  </span>
+                  <MDBBadge pill color="default">
+                    <i className="fas fa-dollar-sign"/> 10.00 $
+                  </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="8" className="float-left">
@@ -246,12 +247,12 @@ class BetSlips extends Component {
                         { b.variant === 'Draw' && <span className="event-title"><b>{`${b.home} - ${b.away}`}</b></span> }
                       </MDBCol>
                       <MDBCol sm="6" className="float-left text-align-left">
-                        <span className="badge badge-pill badge-light event-badge">
+                        <MDBBadge pill className="event-badge" color="light">
                           <i className="fas fa-futbol"/> {b.date}
-                        </span>
-                        <span className="badge badge-pill badge-info event-badge">
+                        </MDBBadge>
+                        <MDBBadge pill className="event-badge" color="info">
                          <i className="fas fa-chart-line"/> {b.course/100}
-                       </span>
+                       </MDBBadge>
                       </MDBCol>
                     </div>
                 ))}
@@ -349,7 +350,7 @@ class BetSlips extends Component {
                 isClearable={true}
               />
 
-              <button className="btn blue-gradient btn-lg btn-rounded btn-sm my-0" type="submit">Search</button>
+              <Button className="btn blue-gradient btn-lg btn-rounded btn-sm my-0" type="submit">Search</Button>
             </form>
           </Container>
           <p>test</p>

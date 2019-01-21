@@ -6,7 +6,8 @@ export default class Auth {
     clientID: 'SnusKbV9Muma176hmEbWOMx2lOnsM3sl',
     redirectUri: 'http://localhost:3000/callback',
     responseType: 'token id_token',
-    scope: 'openid profile'
+    scope: 'openid profile',
+    audience: 'rozrywki2018',
   });
 
   //     "username": "m2984732@nwytg.net",

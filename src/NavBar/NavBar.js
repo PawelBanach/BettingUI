@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import { Button } from 'mdbreact';
 
 class NavBar extends Component {
   constructor(props) {
@@ -21,8 +22,8 @@ class NavBar extends Component {
   renderUnauthenticatedNavBar() {
     return (
       <div>
-        <button className="btn btn-dark" onClick={() => {this.register()}}>Register</button>
-        <button className="btn btn-dark" onClick={() => {this.login()}}>Sign In</button>
+        <Button className="btn btn-dark" onClick={() => {this.register()}}>Register</Button>
+        <Button className="btn btn-dark" onClick={() => {this.login()}}>Sign In</Button>
       </div>
     )
   }
@@ -33,7 +34,7 @@ class NavBar extends Component {
       <div>
         <img src={picture} alt="Avatar" className="avatar"/>
         <label className="mr-2 text-white">{nickname}</label>
-        <button className="btn btn-dark" onClick={() => {this.logout()}}>Sign Out</button>
+        <Button className="btn btn-dark" onClick={() => {this.logout()}}>Sign Out</Button>
       </div>
     )
   };

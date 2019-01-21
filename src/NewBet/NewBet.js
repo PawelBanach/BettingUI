@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom';
 import auth0Client from '../Auth';
 import axios from 'axios';
+import { Button } from 'mdbreact';
 
 class NewBet extends Component {
   constructor(props) {
@@ -69,12 +70,12 @@ class NewBet extends Component {
                     placeholder="Give more context to your bet."
                   />
                 </div>
-                <button
+                <Button
                   disabled={this.state.disabled}
                   className="btn btn-primary"
                   onClick={() => {this.submit()}}>
                   Submit
-                </button>
+                </Button>
               </div>
             </div>
           </div>

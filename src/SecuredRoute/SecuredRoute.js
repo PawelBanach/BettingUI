@@ -10,7 +10,10 @@ function SecuredRoute(props) {
         return <div>Not authorized</div>;
       }
       const profile = auth.getProfile();
-      return <Component profile={ profile }/>
+      const accessToken = auth.getAccessToken();
+      const idToken = auth.getIdToken();
+      debugger;
+      return <Component profile={ profile } accessToken={ accessToken } />
     }} />
   );
 }

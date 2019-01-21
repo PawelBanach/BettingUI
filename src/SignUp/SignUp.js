@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { MDBContainer } from 'mdbreact';
+import { MDBContainer, Button } from 'mdbreact';
 
 class SignUp extends Component {
   constructor(props) {
@@ -113,12 +113,12 @@ class SignUp extends Component {
               name="password_confirmation"
             />
             <p className="form-error">{ this.state.error }</p>
-            <button
+            <Button
               disabled={this.state.disabled}
               className="btn btn-dark btn-block btn-margin-top"
               type="submit">
               Sign Up
-            </button>
+            </Button>
           </form>
         </div>
       </MDBContainer>

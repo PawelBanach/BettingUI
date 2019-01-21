@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Accordion, AccordionItem, AccordionItemTitle, AccordionItemBody } from 'react-accessible-accordion';
+import { Button } from 'mdbreact';
 
 class EventsTable extends Component {
   constructor(props) {
@@ -15,13 +16,13 @@ class EventsTable extends Component {
         <td>
           <div className="btn-group odd-group" role="group" aria-label="Odds">
             {match.odds.outcomes.map(odd => (
-              <button
+              <Button
                 key={odd.id}
                 className="odd-result btn btn btn-sm cloudy-knoxville-gradient btn-rounded"
                 onClick={() => this.props.addBet(match, odd.value, odd.id)}
               >
                 <div className="odd-value">{ odd.value }</div>
-              </button>
+              </Button>
             ))}
           </div>
         </td>

@@ -14,7 +14,7 @@ class BetSlipsService {
   //     "money": 100
   // }
   static createBetSlip(body, successCallback, failureCallback) {
-    axios.post(`${HttpClient.url()}/bet-slips`, body, { headers: {'Content-Type': 'application/json'} })
+    axios.post(`${HttpClient.bet_service()}/bet-slips`, body, { headers: {'Content-Type': 'application/json'} })
       .then(response => successCallback(response))
       .catch(errors => failureCallback(errors));
   }
@@ -24,7 +24,7 @@ class BetSlipsService {
       return (acc === '') ? `?${key}=${options[key]}` : `${acc}&${key}=${options[key]}`;
     }, '');
 
-    axios.get(`${HttpClient.url()}/bet-slips${queryParams}`, { headers: {'Content-Type': 'application/json'} })
+    axios.get(`${HttpClient.bet_service()}/bet-slips${queryParams}`, { headers: {'Content-Type': 'application/json'} })
       .then(response => successCallback(response))
       .catch(errors => failureCallback(errors));
   }

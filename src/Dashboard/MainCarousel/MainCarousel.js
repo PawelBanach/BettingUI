@@ -57,7 +57,7 @@ const MainCarousel = () => (
             <Mask overlay="black-strong" />
           </View>
           <CarouselCaption>
-            <h3 className="h3-responsive"><b>Get $500 bonus for registration</b></h3>
+            <h3 className="h3-responsive"><b>Get 500 $ bonus for registration</b></h3>
             <p><b>Hurry up! The action lasts to 31 Dec 2030</b></p>
           </CarouselCaption>
         </CarouselItem>

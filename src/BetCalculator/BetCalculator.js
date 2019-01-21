@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import BetSlipsService from '../Services/BetSlips/BetSlipsService';
+import { Button } from 'mdbreact';
 
 class BetCalculator extends Component {
   constructor(props) {
@@ -82,7 +83,7 @@ class BetCalculator extends Component {
                 <input type="number" className="form-control" aria-label="Amount (to the nearest zloty)"
                        value={betBase} onChange={this.props.handleBaseChange}/>
                 <div className="input-group-append">
-                  <span className="input-group-text">.00 zł</span>
+                  <span className="input-group-text">.00 $</span>
                 </div>
               </div>
               { bets.length === 0 &&
@@ -101,17 +102,17 @@ class BetCalculator extends Component {
           <p className="card-text">
             <b>
               Total odd: {totalOdd}<br/>
-              Estimated win <small>(with tax)</small>: {cashReward} zł
+              Estimated win <small>(with tax)</small>: {cashReward} $
             </b>
           </p>
           }
 
-          <button
+          <Button
             disabled={bets.length === 0}
             className="btn blue-gradient float-right"
             onClick={() => this.onBet(demo)}>
             Bet
-          </button>
+          </Button>
         </div>
       </div>
     )

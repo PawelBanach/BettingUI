@@ -287,3 +287,40 @@ code {
 .event-badge{
   margin: 0 10px;
 }
+
+.display-inline {
+  display: inline !important;
+}
+
+.wallet-info {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.wallet-money {
+  font-size: 14px;
+  margin-left: 10px;
+  font-weight: 400;
+}
+
+.margin-top-40 {
+  margin-top: 40px;
+}
+
+.wallet-header {
+  margin: 15px;
+  text-align: left;
+}
+
+.wallet-money-info {
+  width: 100%;
+  margin: 15px;
+}
+
+.wallet-buttons {
+  margin: 10px;
+}
+
+.margin-top-30 {
+  margin: 30px 0;
+}

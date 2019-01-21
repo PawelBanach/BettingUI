@@ -12,7 +12,7 @@ class MatchesService {
   //     "to": ...,
   // }
   static getMatches(options, successCallback, failureCallback) {
-    axios.post(`${HttpClient.url()}/matches`, options, { headers: {'Content-Type': 'application/json'} })
+    axios.post(`${HttpClient.bet_service()}/matches`, options, { headers: {'Content-Type': 'application/json'} })
       .then(response => successCallback(response))
       .catch(errors => failureCallback(errors));
 

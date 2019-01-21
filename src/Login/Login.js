@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import auth0Client from '../Auth';
+import { Button } from 'mdbreact';
 
 class Login extends Component {
   constructor(props) {
@@ -70,12 +71,12 @@ class Login extends Component {
             placeholder="Password"
           />
           <p className="form-error">{ this.state.error }</p>
-          <button
+          <Button
             disabled={this.state.disabled}
             className="btn btn-primary btn-block btn-margin-top"
             type="submit">
             Sign In
-          </button>
+          </Button>
         </form>
       </div>
     )

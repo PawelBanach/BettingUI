@@ -1,34 +1,16 @@
 import axios from 'axios';
 
-const URL = 'https://59ff134a.ngrok.io';
+const BET_SERVICE = 'https://59ff134a.ngrok.io';
+const PAYMENT_SERVICE = 'http://501f07f6.ngrok.io';
 
 class HttpClient {
-  static url() {
-    return URL;
+  static bet_service() {
+    return BET_SERVICE;
   }
-  // static get(url, headers = {}, successCallback, failureCallback) {
-  //   axios.get(url, { headers: headers })
-  //     .then(response => successCallback(camelizeKeys(response.data)))
-  //     .catch(errors => failureCallback(errors.response.data.errors));
-  // }
-  //
-  // static post(url, body = {}, headers = {}, successCallback, failureCallback) {
-  //   axios.post(url, decamelizeKeys(body), { headers: headers })
-  //     .then(response => successCallback(camelizeKeys(response.data)))
-  //     .catch(errors => failureCallback(errors.response.data.errors));
-  // }
-  //
-  // static put(url, body = {}, headers = {}, successCallback, failureCallback) {
-  //   axios.put(url, decamelizeKeys(body), { headers: headers })
-  //     .then(response => successCallback(camelizeKeys(response.data)))
-  //     .catch(errors => failureCallback(errors.response.data.errors));
-  // }
-  //
-  // static delete(url, headers = {}, successCallback, failureCallback) {
-  //   axios.delete(url, { headers: headers })
-  //     .then(response => successCallback(camelizeKeys(response.data)))
-  //     .catch(errors => failureCallback(errors.response.data.errors));
-  // }
+
+  static payment_service() {
+    return PAYMENT_SERVICE;
+  }
 }
 
 export default HttpClient;
