@@ -27,7 +27,7 @@ class EventBoard extends Component {
       matchesGroupedByLeague: {},
       errors: [],
       demo: props.demo,
-      userId: name, // temporary i pass `name`
+      userId: "test3", // temporary i pass `name`
     };
   }
 
@@ -130,7 +130,7 @@ class EventBoard extends Component {
         <MDBCol sm="9" className="float-left">
           { Object.keys(matchesGroupedByLeague).length !== 0 &&
             <EventsTable
-              leagues={ [...this.MOST_POPULAR_LEAGUES, ...this.EKSTRAKLASA] }
+              leagues={ Object.keys(matchesGroupedByLeague) }
               matches={ matchesGroupedByLeague }
               addBet={ this.addBet }
             />

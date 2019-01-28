@@ -56,12 +56,15 @@ class BetCalculator extends Component {
     BetSlipsService.createBetSlip(
       betSlip,
       response => {
+        // 1 TODO:Zaimplementować widok beta czy coś :P
         let id = response.data.id;
         this.props.history.push(`/bet-slips/${id}`);
       },
-      errors => this.setState(prevState => ({
-        errors: [...prevState.errors, errors]
-      }))
+      errors => {
+        this.setState(prevState => ({
+          errors: [...prevState.errors, errors]
+        }))
+      }
     )
   };
 

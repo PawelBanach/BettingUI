@@ -241,9 +241,9 @@ code {
   padding: 0.6em 1em !important;
 }
 
-.container-margin {
-  margin-right: 180px !important;
-}
+/*.container-margin {*/
+  /*margin-right: 180px !important;*/
+/*}*/
 
 .match-badge {
   margin-right: 10px;

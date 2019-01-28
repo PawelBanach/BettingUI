@@ -15,7 +15,7 @@ class Wallet extends Component {
       modal: "close",
       amount: 0,
       accessToken: props.accessToken,
-      userId: props.profile.name,
+      userId: "test3",
     };
     debugger;
   }
@@ -27,7 +27,8 @@ class Wallet extends Component {
   refreshWalletInfo() {
     PaymentsService.getWalletInfo(this.state.userId, this.returnHeaders(),
       response => {
-        const { balance, walletTransactions} = response.wallet;
+        debugger;
+        const { balance, walletTransactions} = response.data[0].wallet;
         debugger;
         this.setState({ balance, walletTransactions });
       },
@@ -39,7 +40,7 @@ class Wallet extends Component {
 
   returnHeaders = () => {
     return {
-      'Authorization': this.state.accessToken,
+      'Authorization': `Bearer ${this.state.accessToken}`,
       'Content-Type': 'application/json'
     };
   };
@@ -61,11 +62,13 @@ class Wallet extends Component {
 
     PaymentsService.createTransaction(this.state.userId, body, this.returnHeaders(),
       response => {
+        debugger;
         this.refreshWalletInfo();
         this.setState({modal: "close"})
       },
       error => {
         // TODO
+        debugger;
         this.setState({modal: "close"})
       })
   };
@@ -79,7 +82,7 @@ class Wallet extends Component {
             <MDBCol sm="3" className="float-left">
               <div>
                 <MDBBadge pill color="light">
-                  <i className="far fa-clock"/> {moment(transaction.date).format('MMMM Do YYYY, h:mm:ss a')}
+                  <i className="far fa-clock"/> {moment(transaction.createdDate).format('MMMM Do YYYY, h:mm:ss a')}
                 </MDBBadge>
               </div>
             </MDBCol>

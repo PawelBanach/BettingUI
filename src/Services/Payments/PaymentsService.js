@@ -34,13 +34,13 @@ class PaymentsService {
 
 
   static getWalletInfo(userId, headers, successCallback, failureCallback) {
-    // axios.get(`${HttpClient.payment_service()}/api/players/${userId}`, { headers })
-    //   .then(response => successCallback(response))
-    //   .catch(errors => failureCallback(errors));
-    successCallback(MOCKED_RESPONSE);
+    axios.get(`${HttpClient.payment_service()}/api/players/${userId}`, { headers })
+      .then(response => successCallback(response))
+      .catch(errors => failureCallback(errors));
   }
 
   static createTransaction(userId, body, headers, successCallback, failureCallback) {
+    debugger;
     axios.post(
       `${HttpClient.payment_service()}/api/players/${userId}/wallet`,
       body,

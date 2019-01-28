@@ -9,108 +9,21 @@ import { formatDate, parseDate } from 'react-day-picker/moment';
 // import dayPickerStyles from './DayPickerInput.css';
 import Select from 'react-select';
 import InfiniteScroll from 'react-infinite-scroller'
+import { withRouter } from 'react-router-dom';
 // https://github.com/CassetteRocks/react-infinite-scroller/blob/master/docs/src/index.js
 
 const options = [
-  { value: 'pending', label: 'Pending' },
-  { value: 'in-progress', label: 'In Progress' },
-  { value: 'finished', label: 'Finished' }
+  { value: 'Pending', label: 'Pending' },
+  { value: 'InProgress', label: 'In Progress' },
+  { value: 'Finished', label: 'Finished' }
 ];
 
-const betSlipsMock = [
-  {
-    betSlipId : "04dfc6ab-dc88-41cf-8665-0de3fbfe6f63",
-    bets : [
-      {
-        matchId : "1145814777173199265",
-        course : 265,
-        variant : "Home Win",
-        home: "FC Barcelona",
-        away: "Real Madryt",
-        date: "7 May 19 20:40",
-      },
-    ],
-    cashierId : "1",
-    userId : "1",
-    deskId : "1",
-    money : 0
-  },
-  {
-    betSlipId : "04dfc6ab-dc88-41cf-8665-0de3fbfe6f64",
-    bets : [
-      {
-        matchId : "1145814777173199265",
-        course : 265,
-        variant : "Home Win",
-        home: "FC Barcelona",
-        away: "Real Madryt",
-        date: "7 May 19 20:40",
-      },
-      {
-        matchId : "1145814777173199265",
-        course : 165,
-        variant : "Draw",
-        home: "Liverpool",
-        away: "Arsenal Londyn",
-        date: "9 May 19 20:40",
-      },
-      {
-        matchId : "1145814777173199265",
-        course : 312,
-        variant : "Home Win",
-        home: "PSG",
-        away: "AS Monaco",
-        date: "8 May 19 20:40",
-      },
-      {
-        matchId : "1145814777173199265",
-        course : 119,
-        variant : "Away Win",
-        home: "Legia Warszawa",
-        away: "Wisła Kraków",
-        date: "11 May 19 20:40",
-      },
-    ],
-    cashierId : "1",
-    userId : "1",
-    deskId : "1",
-    money : 0
-  },
-  {
-    betSlipId : "04dfc6ab-dc88-41cf-8665-0de3fbfe6f65",
-    bets : [ {
-      matchId : "1145814777173199265",
-      course : 265,
-      variant : "Home Win",
-      home: "FC Barcelona",
-      away: "Real Madryt",
-      date: "7 May 19 20:40",
-    } ],
-    cashierId : "1",
-    userId : "1",
-    deskId : "1",
-    money : 0
-  },
-  {
-    betSlipId : "04dfc6ab-dc88-41cf-8665-0de3fbfe6f66",
-    bets : [ {
-      matchId : "1145814777173199265",
-      course : 265,
-      variant : "Home Win",
-      home: "FC Barcelona",
-      away: "Real Madryt",
-      date: "7 May 19 20:40",
-    } ],
-    cashierId : "1",
-    userId : "1",
-    deskId : "1",
-    money : 0
-  },
-];
+const LIMIT = 10;
 
 class BetSlips extends Component {
   constructor(props) {
     super(props);
+    debugger;
     this.state = {
       betSlips: [],
       betDetails: null,
@@ -119,32 +32,12 @@ class BetSlips extends Component {
       errors: [],
       from: undefined,
       to: undefined,
-      selectedOption: null,
+      result: {},
     };
     this.handleFromChange = this.handleFromChange.bind(this);
     this.handleToChange = this.handleToChange.bind(this);
   }
-
-  componentDidMount() {
-    // TODO:
-    // https://59ff134a.ngrok.io/bet-slips?limit=10&offset=0&user=1
-    let options = {
-      limit: 10,
-      offset: 0,
-      user: 1,
-    };
-    BetSlipsService.getBetSlips(options,
-      response => {
-      // let betSlips = response.data.value;
-      // this.setState({ betSlips });
-      this.setState({ betSlips: betSlipsMock });
-      },
-      errors => this.setState(prevState => ({
-        errors: [...prevState.errors, errors]
-      }))
-    )
-  }
-
+  
   showFromMonth() {
     const { from, to } = this.state;
     if (!from) {
@@ -160,36 +53,68 @@ class BetSlips extends Component {
   }
 
   handleToChange(to) {
+    debugger;
     this.setState({ to }, this.showFromMonth);
   }
 
-  handleChange = (selectedOption) => {
-    this.setState({ selectedOption });
+  handleChange = (result) => {
+    this.setState({ result });
   };
 
   loadBetSlips = (page) => {
-    const self = this;
-
-    this.setState(prevState => ({
-        betSlips: [...prevState.betSlips, ...betSlipsMock]
-    }))
+    const { from, to, result } = this.state;
+    let options = {
+      limit: LIMIT,
+      offset: (page-1)*10,
+      user: "test3",
+      from: from ? from.toJSON() : null,
+      to: to ? to.toJSON() : null,
+      result: result.value
+    };
+    debugger;
+    BetSlipsService.getBetSlips(options,
+      response => {
+        debugger;
+        let betSlips = response.data.values;
+        this.setState(prevState => ({
+          betSlips: page === 1 ? betSlips : [...prevState.betSlips, ...betSlips],
+          hasMoreItems: betSlips.length === LIMIT,
+          betDetails: null,
+        }))
+      },
+      errors => this.setState(prevState => ({
+        errors: [...prevState.errors, errors]
+      }))
+    );
   };
 
-  handleBetSlip = (betSlip, i) => {
-    const betDetails = i;
+  handleBetSlip = (betSlip) => {
+    const betDetails = betSlip.betSlipId;
     this.setState(prevState => {
       return (prevState.betDetails === betDetails) ? { betDetails: null } : { betDetails }
     });
   };
 
+  handleSearch = (event) => {
+    this.loadBetSlips(1);
+    event.preventDefault();
+  };
+
   renderList(betSlips, betDetails) {
+    // 2 TODO: Dorobić liczenie ile siadło meczów a ile nie siadło
+    // 3 TODO: Dorobić ładny kręciolek
+    // 4 TODO: Dorobic szukanie
+    // 5 TODO: Obsłużyc wszedzie bledy
+    // 6 TODO: Wymienić ikonki po lewej stronie
+    // 7 TODO: Badge zmienić na jakiś ładny kolor
+
     let betSlipsList = [];
-    betSlips.forEach( (betSlip, i) =>{
+    betSlips.forEach( (betSlip) =>{
       betSlipsList.push(
-        <li className="list-group-item bet-slip-row" key={i} ref={`betSlip#${i}`} onClick={() => this.handleBetSlip(betSlip, i)}>
-          { betDetails !== i &&
+        <li className="list-group-item bet-slip-row" key={betSlip.betSlipId} ref={`betSlip#${betSlip.betSlipId}`} onClick={() => this.handleBetSlip(betSlip)}>
+          { betDetails !== betSlip.betSlipId &&
             <MDBRow>
-              <MDBCol sm="3" className="float-left">
+              <MDBCol sm="2" className="float-left">
                 <div>
                   <MDBBadge pill color="light">
                     <i className="far fa-calendar-check"/> 8/1/2019
@@ -199,15 +124,22 @@ class BetSlips extends Component {
               <MDBCol sm="3" className="float-left">
                 <div>
                 <MDBBadge pill color="primary">
-                  <i className="fas fa-tasks"/> IN PROGRESS
+                  <i className="fas fa-tasks"/> {betSlip.result}
                 </MDBBadge>
                 </div>
               </MDBCol>
-              <MDBCol sm="3" className="float-left">
+              <MDBCol sm="2" className="float-left">
                 <div>
                 <MDBBadge pill color="default">
-                  <i className="fas fa-dollar-sign"/> 10.00 $
+                  <i className="fas fa-dollar-sign"/> {betSlip.money}
                 </MDBBadge>
+                </div>
+              </MDBCol>
+              <MDBCol sm="2" className="float-left">
+                <div>
+                  <MDBBadge pill color="default">
+                    <i className="fas fa-dollar-sign"/> {betSlip.expectedWin}
+                  </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="3" className="float-left">
@@ -219,7 +151,7 @@ class BetSlips extends Component {
               </MDBCol>
             </MDBRow>
           }
-          { betDetails === i &&
+          { betDetails === betSlip.betSlipId &&
             <MDBRow className="active-row">
               <MDBCol sm="4" className="float-left text-align-right">
                 <div className="bet-row">
@@ -229,12 +161,17 @@ class BetSlips extends Component {
                 </div>
                 <div className="bet-row">
                   <MDBBadge pill color="primary">
-                    <i className="fas fa-tasks"/> IN PROGRESS
+                    <i className="fas fa-tasks"/> {betSlip.result}
                   </MDBBadge>
                 </div>
                 <div className="bet-row">
                   <MDBBadge pill color="default">
-                    <i className="fas fa-dollar-sign"/> 10.00 $
+                    <i className="fas fa-dollar-sign"/> {betSlip.money}
+                  </MDBBadge>
+                </div>
+                <div className="bet-row">
+                  <MDBBadge pill color="default">
+                    <i className="fas fa-dollar-sign"/> {betSlip.expectedWin}
                   </MDBBadge>
                 </div>
               </MDBCol>
@@ -266,7 +203,7 @@ class BetSlips extends Component {
   }
 
   render() {
-    const { from, to, selectedOption, betSlips, betDetails, hasMoreItems } = this.state;
+    const { from, to, result, betSlips, betDetails, hasMoreItems } = this.state;
     const modifiers = { start: from, end: to };
 
     return (
@@ -344,13 +281,18 @@ class BetSlips extends Component {
 
               <Select
                 className="status-select"
-                value={selectedOption}
+                value={result}
                 onChange={this.handleChange}
                 options={options}
                 isClearable={true}
               />
 
-              <Button className="btn blue-gradient btn-lg btn-rounded btn-sm my-0" type="submit">Search</Button>
+              <Button
+                className="blue-gradient btn-lg btn-rounded btn-sm my-0"
+                type="submit"
+                onClick={ this.handleSearch }>
+                Search
+              </Button>
             </form>
           </Container>
           <p>test</p>
@@ -364,14 +306,17 @@ class BetSlips extends Component {
               loader={<div className="loader" key={0}>Loading ...</div>}>
               <ul className="list-group list-group-flush text-align-center">
                 <li className="list-group-item" key={0}>
-                  <MDBCol sm="3" className="float-left">
+                  <MDBCol sm="2" className="float-left">
                     <div><span>Date</span></div>
                   </MDBCol>
                   <MDBCol sm="3" className="float-left">
                     <div><span>Status</span></div>
                   </MDBCol>
-                  <MDBCol sm="3" className="float-left">
+                  <MDBCol sm="2" className="float-left">
                     <div><span>Money</span></div>
+                  </MDBCol>
+                  <MDBCol sm="2" className="float-left">
+                    <div><span>Expected win</span></div>
                   </MDBCol>
                   <MDBCol sm="3" className="float-left">
                     <div><span>Bets results</span></div>
@@ -387,4 +332,4 @@ class BetSlips extends Component {
   }
 }
 
-export default BetSlips;
+export default withRouter(BetSlips);
