@@ -10,12 +10,13 @@ import { formatDate, parseDate } from 'react-day-picker/moment';
 import Select from 'react-select';
 import InfiniteScroll from 'react-infinite-scroller'
 import { withRouter } from 'react-router-dom';
+import { NotificationManager } from 'react-notifications';
 // https://github.com/CassetteRocks/react-infinite-scroller/blob/master/docs/src/index.js
 
 const options = [
-  { value: 'Pending', label: 'Pending' },
-  { value: 'InProgress', label: 'In Progress' },
-  { value: 'Finished', label: 'Finished' }
+  { value: 'PENDING', label: 'Pending' },
+  { value: 'LOST', label: 'Lost' },
+  { value: 'WON', label: 'Won' }
 ];
 
 const LIMIT = 10;
@@ -23,7 +24,7 @@ const LIMIT = 10;
 class BetSlips extends Component {
   constructor(props) {
     super(props);
-    debugger;
+
     this.state = {
       betSlips: [],
       betDetails: null,
@@ -37,7 +38,7 @@ class BetSlips extends Component {
     this.handleFromChange = this.handleFromChange.bind(this);
     this.handleToChange = this.handleToChange.bind(this);
   }
-  
+
   showFromMonth() {
     const { from, to } = this.state;
     if (!from) {
@@ -53,7 +54,6 @@ class BetSlips extends Component {
   }
 
   handleToChange(to) {
-    debugger;
     this.setState({ to }, this.showFromMonth);
   }
 
@@ -66,25 +66,27 @@ class BetSlips extends Component {
     let options = {
       limit: LIMIT,
       offset: (page-1)*10,
-      user: "test3",
-      from: from ? from.toJSON() : null,
-      to: to ? to.toJSON() : null,
+      user: "test4",
+      date_from: from ? from.getTime() : undefined,
+      date_to: to ? to.getTime() : undefined,
       result: result.value
     };
-    debugger;
+
     BetSlipsService.getBetSlips(options,
       response => {
-        debugger;
-        let betSlips = response.data.values;
+       let betSlips = response.data.values;
         this.setState(prevState => ({
           betSlips: page === 1 ? betSlips : [...prevState.betSlips, ...betSlips],
           hasMoreItems: betSlips.length === LIMIT,
           betDetails: null,
         }))
       },
-      errors => this.setState(prevState => ({
-        errors: [...prevState.errors, errors]
-      }))
+      errors => {
+        NotificationManager.error('Cannot load BetSlips', 'Error!');
+        this.setState(prevState => ({
+          errors: [...prevState.errors, errors]
+        }));
+      }
     );
   };
 
@@ -100,11 +102,12 @@ class BetSlips extends Component {
     event.preventDefault();
   };
 
+  formatDate(time) {
+    return time ? moment(time).format('lll') : '-';
+  };
+
   renderList(betSlips, betDetails) {
     // 2 TODO: Dorobić liczenie ile siadło meczów a ile nie siadło
-    // 3 TODO: Dorobić ładny kręciolek
-    // 4 TODO: Dorobic szukanie
-    // 5 TODO: Obsłużyc wszedzie bledy
     // 6 TODO: Wymienić ikonki po lewej stronie
     // 7 TODO: Badge zmienić na jakiś ładny kolor
 
@@ -114,64 +117,64 @@ class BetSlips extends Component {
         <li className="list-group-item bet-slip-row" key={betSlip.betSlipId} ref={`betSlip#${betSlip.betSlipId}`} onClick={() => this.handleBetSlip(betSlip)}>
           { betDetails !== betSlip.betSlipId &&
             <MDBRow>
-              <MDBCol sm="2" className="float-left">
+              <MDBCol sm="3" className="float-left">
                 <div>
-                  <MDBBadge pill color="light">
-                    <i className="far fa-calendar-check"/> 8/1/2019
+                  <MDBBadge pill color="light-blue lighten-1">
+                    <i className="far fa-calendar-check"/> { this.formatDate(betSlip.time) }
                   </MDBBadge>
                 </div>
               </MDBCol>
               <MDBCol sm="3" className="float-left">
                 <div>
-                <MDBBadge pill color="primary">
+                <MDBBadge pill color="light-blue darken-1">
                   <i className="fas fa-tasks"/> {betSlip.result}
                 </MDBBadge>
                 </div>
               </MDBCol>
-              <MDBCol sm="2" className="float-left">
+              <MDBCol sm="3" className="float-left">
                 <div>
-                <MDBBadge pill color="default">
+                <MDBBadge pill color="light-blue darken-3">
                   <i className="fas fa-dollar-sign"/> {betSlip.money}
                 </MDBBadge>
                 </div>
               </MDBCol>
-              <MDBCol sm="2" className="float-left">
+              <MDBCol sm="3" className="float-left">
                 <div>
-                  <MDBBadge pill color="default">
-                    <i className="fas fa-dollar-sign"/> {betSlip.expectedWin}
+                  <MDBBadge pill color="light-blue darken-4">
+                    <i className="fas fa-dollar-sign"/> { Math.round(betSlip.expectedWin * 100) / 100 }
                   </MDBBadge>
                 </div>
               </MDBCol>
-              <MDBCol sm="3" className="float-left">
-                <div>
-                  <MDBBadge pill className="match-badge" color="success">1</MDBBadge>
-                  <MDBBadge pill className="match-badge" color="danger">1</MDBBadge>
-                  <MDBBadge pill className="match-badge" color="primary">2</MDBBadge>
-                </div>
-              </MDBCol>
+              {/*<MDBCol sm="3" className="float-left">*/}
+                {/*<div>*/}
+                  {/*<MDBBadge pill className="match-badge" color="success">1</MDBBadge>*/}
+                  {/*<MDBBadge pill className="match-badge" color="danger">1</MDBBadge>*/}
+                  {/*<MDBBadge pill className="match-badge" color="primary">2</MDBBadge>*/}
+                {/*</div>*/}
+              {/*</MDBCol>*/}
             </MDBRow>
           }
           { betDetails === betSlip.betSlipId &&
             <MDBRow className="active-row">
               <MDBCol sm="4" className="float-left text-align-right">
                 <div className="bet-row">
-                  <MDBBadge pill color="light">
-                    <i className="far fa-calendar-check"/> 8/1/2019
+                  <MDBBadge pill color="light-blue lighten-1">
+                    <i className="far fa-calendar-check"/> { this.formatDate(betSlip.time) }
                   </MDBBadge>
                 </div>
                 <div className="bet-row">
-                  <MDBBadge pill color="primary">
+                  <MDBBadge pill color="light-blue darken-1">
                     <i className="fas fa-tasks"/> {betSlip.result}
                   </MDBBadge>
                 </div>
                 <div className="bet-row">
-                  <MDBBadge pill color="default">
+                  <MDBBadge pill color="light-blue darken-3">
                     <i className="fas fa-dollar-sign"/> {betSlip.money}
                   </MDBBadge>
                 </div>
                 <div className="bet-row">
-                  <MDBBadge pill color="default">
-                    <i className="fas fa-dollar-sign"/> {betSlip.expectedWin}
+                  <MDBBadge pill color="light-blue darken-4">
+                    <i className="fas fa-dollar-sign"/> { Math.round(betSlip.expectedWin * 100) / 100 }
                   </MDBBadge>
                 </div>
               </MDBCol>
@@ -184,10 +187,10 @@ class BetSlips extends Component {
                         { b.variant === 'Draw' && <span className="event-title"><b>{`${b.home} - ${b.away}`}</b></span> }
                       </MDBCol>
                       <MDBCol sm="6" className="float-left text-align-left">
-                        <MDBBadge pill className="event-badge" color="light">
-                          <i className="fas fa-futbol"/> {b.date}
+                        <MDBBadge pill className="event-badge" color="light-blue accent-3">
+                          <i className="fas fa-futbol"/> { this.formatDate(b.date) }
                         </MDBBadge>
-                        <MDBBadge pill className="event-badge" color="info">
+                        <MDBBadge pill className="event-badge" color="light-blue accent-4">
                          <i className="fas fa-chart-line"/> {b.course/100}
                        </MDBBadge>
                       </MDBCol>
@@ -303,24 +306,24 @@ class BetSlips extends Component {
               pageStart={0}
               loadMore={this.loadBetSlips}
               hasMore={hasMoreItems}
-              loader={<div className="loader" key={0}>Loading ...</div>}>
+              loader={<div className="loader" key={0}></div>}>
               <ul className="list-group list-group-flush text-align-center">
                 <li className="list-group-item" key={0}>
-                  <MDBCol sm="2" className="float-left">
+                  <MDBCol sm="3" className="float-left">
                     <div><span>Date</span></div>
                   </MDBCol>
                   <MDBCol sm="3" className="float-left">
                     <div><span>Status</span></div>
                   </MDBCol>
-                  <MDBCol sm="2" className="float-left">
+                  <MDBCol sm="3" className="float-left">
                     <div><span>Money</span></div>
                   </MDBCol>
-                  <MDBCol sm="2" className="float-left">
+                  <MDBCol sm="3" className="float-left">
                     <div><span>Expected win</span></div>
                   </MDBCol>
-                  <MDBCol sm="3" className="float-left">
-                    <div><span>Bets results</span></div>
-                  </MDBCol>
+                  {/*<MDBCol sm="3" className="float-left">*/}
+                    {/*<div><span>Bets results</span></div>*/}
+                  {/*</MDBCol>*/}
                 </li>
                 { this.renderList(betSlips, betDetails) }
               </ul>

@@ -7,11 +7,9 @@ import MatchesService from '../Services/Matches/MatchesService';
 import 'react-accessible-accordion/dist/fancy-example.css';
 import BetCalculator from '../BetCalculator/BetCalculator';
 import EventsTable from '../EventsTable/EventsTable';
+import { NotificationManager } from 'react-notifications';
 
 class EventBoard extends Component {
-  MOST_POPULAR_LEAGUES = ['Premier League', 'ESP La Liga Primera', 'FRA Division 1', 'GER Bundesliga',  'Serie A'];
-  EKSTRAKLASA = ['POL Ekstraklasa'];
-
   constructor(props) {
     super(props);
     let name = '';
@@ -27,7 +25,7 @@ class EventBoard extends Component {
       matchesGroupedByLeague: {},
       errors: [],
       demo: props.demo,
-      userId: "test3", // temporary i pass `name`
+      userId: "test4", // temporary i pass `name`
     };
   }
 
@@ -44,6 +42,7 @@ class EventBoard extends Component {
         let matchesGroupedByLeague = this.groupByLeague(formattedMatches);
         this.setState({ matches: formattedMatches, matchesGroupedByLeague: matchesGroupedByLeague })
       }, errors => {
+        NotificationManager.error('Cannot get matches!', 'Error!');
         this.setState(prevState => ({
           errors: [...prevState.errors, errors]
         }))
@@ -121,12 +120,16 @@ class EventBoard extends Component {
     )
   };
 
+  resetBetSlip = () => {
+    this.setState({ betBase: 1, cashReward: 1, totalOdd: 1, bets: []});
+  };
+
   render() {
     const { matchesGroupedByLeague, demo, bets, betBase, cashReward, totalOdd, userId } = this.state;
 
     return (
       <Container className="container-margin">
-        <h3 className="bets-header">Bet the latest matches from 5 TOP LEAGUES and Ekstraklasa</h3>
+        <h3 className="bets-header">Bet the latest matches from all leagues!</h3>
         <MDBCol sm="9" className="float-left">
           { Object.keys(matchesGroupedByLeague).length !== 0 &&
             <EventsTable
@@ -145,6 +148,7 @@ class EventBoard extends Component {
             deleteBet={ this.deleteBet }
             totalOdd={ totalOdd }
             handleBaseChange={ this.handleBaseChange }
+            resetBetSlip={ this.resetBetSlip }
             userId={ userId }
           />
         </MDBCol>

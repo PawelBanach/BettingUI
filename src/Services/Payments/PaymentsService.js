@@ -40,7 +40,6 @@ class PaymentsService {
   }
 
   static createTransaction(userId, body, headers, successCallback, failureCallback) {
-    debugger;
     axios.post(
       `${HttpClient.payment_service()}/api/players/${userId}/wallet`,
       body,

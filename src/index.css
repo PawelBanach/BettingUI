@@ -324,3 +324,7 @@ code {
 .margin-top-30 {
   margin: 30px 0;
 }
+
+.loader {
+  margin: 20px 45%;
+}

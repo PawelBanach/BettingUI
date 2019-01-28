@@ -20,6 +20,7 @@ class BetSlipsService {
   }
 
   static getBetSlips(options = {}, successCallback, failureCallback) {
+    Object.keys(options).forEach(key => options[key] === undefined && delete options[key]);
     let queryParams = Object.keys(options).reduce((acc, key) => {
       return (acc === '') ? `?${key}=${options[key]}` : `${acc}&${key}=${options[key]}`;
     }, '');

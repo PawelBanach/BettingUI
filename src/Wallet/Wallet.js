@@ -5,6 +5,7 @@ import {
 } from 'mdbreact';
 import PaymentsService from '../Services/Payments/PaymentsService';
 import moment from 'moment';
+import { NotificationManager } from 'react-notifications';
 
 class Wallet extends Component {
   constructor(props) {
@@ -15,26 +16,22 @@ class Wallet extends Component {
       modal: "close",
       amount: 0,
       accessToken: props.accessToken,
-      userId: "test3",
+      userId: "test4",
     };
-    debugger;
   }
 
   componentDidMount() {
     this.refreshWalletInfo();
-  }
+  } 
 
   refreshWalletInfo() {
     PaymentsService.getWalletInfo(this.state.userId, this.returnHeaders(),
       response => {
-        debugger;
         const { balance, walletTransactions} = response.data[0].wallet;
-        debugger;
         this.setState({ balance, walletTransactions });
       },
       error => {
-        debugger;
-        // TODO
+        NotificationManager.error('Try again later', 'Error!');
       })
   }
 
@@ -62,14 +59,13 @@ class Wallet extends Component {
 
     PaymentsService.createTransaction(this.state.userId, body, this.returnHeaders(),
       response => {
-        debugger;
         this.refreshWalletInfo();
-        this.setState({modal: "close"})
+        this.setState({modal: "close"});
+        NotificationManager.success('Transaction created', 'Success!');
       },
       error => {
-        // TODO
-        debugger;
-        this.setState({modal: "close"})
+        this.setState({modal: "close"});
+        NotificationManager.error('Try again later', 'Error!');
       })
   };
 
@@ -81,7 +77,7 @@ class Wallet extends Component {
           <MDBRow>
             <MDBCol sm="3" className="float-left">
               <div>
-                <MDBBadge pill color="light">
+                <MDBBadge pill color="light-blue darken-1">
                   <i className="far fa-clock"/> {moment(transaction.createdDate).format('MMMM Do YYYY, h:mm:ss a')}
                 </MDBBadge>
               </div>
@@ -89,16 +85,16 @@ class Wallet extends Component {
             <MDBCol sm="3" className="float-left">
               <div>
                   { transaction.type === 'topup' &&
-                    <MDBBadge pill color="success"><i className="fas fa-chevron-up"/> {transaction.type}</MDBBadge>
+                    <MDBBadge pill color="green darken-2"><i className="fas fa-chevron-up"/> {transaction.type}</MDBBadge>
                   }
                   { transaction.type === 'withdraw' &&
-                    <MDBBadge pill color="danger"><i className="fas fa-chevron-down"/> {transaction.type}</MDBBadge>
+                    <MDBBadge pill color="red darken-2"><i className="fas fa-chevron-down"/> {transaction.type}</MDBBadge>
                   }
               </div>
             </MDBCol>
             <MDBCol sm="3" className="float-left">
               <div>
-                  <MDBBadge pill color="default">
+                  <MDBBadge pill color="light-blue darken-2">
                     <i className="fas fa-dollar-sign"/> {transaction.amount.$numberDecimal} $
                   </MDBBadge>
               </div>
@@ -106,12 +102,12 @@ class Wallet extends Component {
             <MDBCol sm="3" className="float-left">
               <div>
                 { transaction.betId &&
-                  <MDBBadge pill color="info">
+                  <MDBBadge pill color="light-blue darken-3">
                     <i className="fas fa-futbol"/> Bet {transaction.betId}
                   </MDBBadge>
                 }
                 { !transaction.betId &&
-                  <MDBBadge pill color="info">
+                  <MDBBadge pill color="light-blue darken-4">
                     <i className="fas fa-handshake"/> 4007 3639 8038 2946
                   </MDBBadge>
                 }

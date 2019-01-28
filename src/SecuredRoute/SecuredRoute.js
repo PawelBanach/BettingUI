@@ -12,7 +12,7 @@ function SecuredRoute(props) {
       const profile = auth.getProfile();
       const accessToken = auth.getAccessToken();
       const idToken = auth.getIdToken();
-      debugger;
+
       return <Component profile={ profile } accessToken={ accessToken } />
     }} />
   );

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom'
 import BetSlipsService from '../Services/BetSlips/BetSlipsService';
 import { Button } from 'mdbreact';
+import { NotificationManager } from 'react-notifications';
+
 
 class BetCalculator extends Component {
   constructor(props) {
@@ -50,17 +52,18 @@ class BetCalculator extends Component {
       userId: userId,
       cashierId: userId,
       deskId: userId,
-      errors: [],
     };
 
     BetSlipsService.createBetSlip(
       betSlip,
       response => {
-        // 1 TODO:Zaimplementować widok beta czy coś :P
-        let id = response.data.id;
-        this.props.history.push(`/bet-slips/${id}`);
+        NotificationManager.success('Bet-Slip created', 'Success!');
+        this.props.resetBetSlip()
+        // let id = response.data.id;
+        // this.props.history.push(`/bet-slips/${id}`);
       },
       errors => {
+        NotificationManager.error('Try again later', 'Error!');
         this.setState(prevState => ({
           errors: [...prevState.errors, errors]
         }))

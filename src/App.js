@@ -1,5 +1,6 @@
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
+import 'react-notifications/lib/notifications.css';
 import 'mdbreact/dist/css/mdb.css';
 import React, { Component } from 'react';
 import NavBar from './NavBar/NavBar';
@@ -19,6 +20,8 @@ import Wallet from './Wallet/Wallet';
 import Statistics from './Statistics/Statistics';
 import BetSlips from './BetSlips/BetSlips';
 import BetSlip from './BetSlip/BetSlip';
+import { NotificationContainer } from 'react-notifications';
+
 
 class App extends Component {
 
@@ -44,6 +47,7 @@ class App extends Component {
       <div>
         <NavBar auth={this.auth} />
         { this.auth.isAuthenticated() && <SideBar browser={this.props}/>}
+        <NotificationContainer/>
         <Route exact path='/' component={ Dashboard }/>
         <Route exact path='/dashboard' component={ Dashboard }/>
         {/*<Route exact path='/events' component={ Events }/>*/}
